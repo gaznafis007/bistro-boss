@@ -15,7 +15,7 @@ const Card = ({img, title, description, btn, action}) => {
         <h2 className="text-center font-semibold text-xl">{title}</h2>
         <p className="text-center">{description}</p>
         <div className="card-actions justify-center">
-          <Button btnName={btn}/>
+          <Button action={action} btnName={btn}/>
         </div>
       </div>
     </div>

@@ -36,6 +36,11 @@ async function run() {
         const result = await menuCollection.find().toArray();
         res.send(result)
     })
+    app.get('/menu/:category', async(req,res) =>{
+      const query = {category: req.params.category};
+      const result = await menuCollection.find(query).toArray();
+      res.send(result)
+    })
     app.get('/review', async(req,res) =>{
         const result = await reviewCollection.find().toArray();
         res.send(result)

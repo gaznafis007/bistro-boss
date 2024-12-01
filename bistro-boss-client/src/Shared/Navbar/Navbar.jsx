@@ -1,42 +1,42 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const navOptions = (
     <>
       <li>
-        <Link to="/" className="text-white capitalize">
+        <NavLink to="/" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
           home
-        </Link>
+        </NavLink>
       </li>
       <li>
-        <Link to="/contact us" className="text-white capitalize">
+        <NavLink to="/contact us" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
           contact us
-        </Link>
+        </NavLink>
       </li>
       <li>
-        <Link to="/dashboard" className="text-white capitalize">
+        <NavLink to="/dashboard" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
           home
-        </Link>
+        </NavLink>
       </li>
       <li>
-        <Link to="/menu" className="text-white capitalize">
+        <NavLink to="/menu" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
           our menu
-        </Link>
+        </NavLink>
       </li>
       <li>
-        <Link to="/shop" className="text-white capitalize">
+        <NavLink to="/shop/salad" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
           our shop
-        </Link>
+        </NavLink>
       </li>
       <li>
-        <Link to="/signIn" className="text-white capitalize">
+        <NavLink to="/signIn" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
           sign in
-        </Link>
+        </NavLink>
       </li>
     </>
   );
   return (
-    <div className="navbar bg-black opacity-50 text-white z-10 fixed">
+    <div className="navbar bg-black bg-opacity-50 text-white z-10 fixed">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">

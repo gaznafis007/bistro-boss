@@ -5,8 +5,8 @@ const MenuLayout = ({ items}) => {
     <div className="grid md:grid-cols-2 gap-4 my-4">
       {items.map((item) => (
         <div key={item._id} className="flex flex-row justify-between space-x-4">
-          <div className="bg-slate-400 rounded-tr-full rounded-b-full w-1/3">
-            <img src={item?.image} className="w-full rounded-tr-full rounded-b-full" alt="recipeImage" />
+          <div className="rounded-tr-full rounded-b-full w-1/3">
+            <img src={item?.image} className="w-full object-cover rounded-tr-full rounded-b-full" alt="recipeImage" />
           </div>
           <div className="flex flex-col">
             <h3 className="text-xl uppercase">
