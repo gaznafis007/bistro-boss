@@ -1,38 +1,92 @@
 import { NavLink } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const handleLogout = () => {
+    logout().then(() => {
+      Swal.fire("Logout successfully");
+    });
+  };
   const navOptions = (
     <>
       <li>
-        <NavLink to="/" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
+          }
+        >
           home
         </NavLink>
       </li>
       <li>
-        <NavLink to="/contact us" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
+        <NavLink
+          to="/contact us"
+          className={({ isActive }) =>
+            isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
+          }
+        >
           contact us
         </NavLink>
       </li>
       <li>
-        <NavLink to="/dashboard" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
-          home
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
+          }
+        >
+          dashboard
         </NavLink>
       </li>
       <li>
-        <NavLink to="/menu" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
+        <NavLink
+          to="/menu"
+          className={({ isActive }) =>
+            isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
+          }
+        >
           our menu
         </NavLink>
       </li>
       <li>
-        <NavLink to="/shop/salad" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
+        <NavLink
+          to="/shop/salad"
+          className={({ isActive }) =>
+            isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
+          }
+        >
           our shop
         </NavLink>
       </li>
       <li>
-        <NavLink to="/signIn" className={({isActive}) => isActive ? 'text-yellow-400 capitalize' : 'text-white capitalize'}>
-          sign in
-        </NavLink>
+        {user?.uid ? (
+          <p className="text-white hover:text-yellow-400">
+            {user?.displayName}
+          </p>
+        ) : (
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
+            }
+          >
+            sign in
+          </NavLink>
+        )}
       </li>
+      {user?.uid && (
+        <li>
+          <span
+            onClick={handleLogout}
+            className="capitalize hover:text-red-400"
+          >
+            sign out
+          </span>
+        </li>
+      )}
     </>
   );
   return (
@@ -65,9 +119,7 @@ const Navbar = () => {
         <a className="btn btn-ghost text-xl">Bistro Boss</a>
       </div>
       <div className="navbar-end hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navOptions}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navOptions}</ul>
       </div>
     </div>
   );

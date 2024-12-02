@@ -8,7 +8,6 @@ const Menu = () => {
     
     const [menuData, loading] = useFetch('http://localhost:5000/menu')
     const popularItems = menuData?.filter(item => item.category === 'popular');
-    console.log(popularItems);
   return (
     <section className="max-w-[1320px] mx-auto my-4">
       <SectionTitle subHeading={"Check it out"} heading={"from our menu"} />
