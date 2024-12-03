@@ -1,13 +1,70 @@
-import { NavLink, useLoaderData } from "react-router-dom";
+import { NavLink, useLoaderData, useNavigate } from "react-router-dom";
 import ImageSectionContent from "../../Components/ImageSectionContent/ImageSectionContent";
 import img from "../../assets/shop/banner2.jpg";
 import Card from "../../Components/Card/Card";
+import useAuth from "../../hooks/useAuth";
+import Swal from "sweetalert2";
+import useAxios from "../../hooks/useAxios";
+import { useState } from "react";
+import useCart from "../../hooks/useCart";
+
 
 const OurShop = () => {
     const categories = [
         'salad', 'pizza', 'soup', 'dessert', 'drinks'
     ]
+    const [,refetch,] = useCart()
+    const [cartLoading, setCartLoading] = useState(false);
     const menuData = useLoaderData();
+    const {user} = useAuth();
+    const axiosSecure = useAxios()
+    const navigate = useNavigate()
+    const handleSaveCart = (item) =>{
+      setCartLoading(true)
+      if(user?.uid){
+        const cart = {
+          email: user?.email,
+          menuId: item?._id,
+          name: item?.name,
+          img: item?.image,
+          price: item?.price,
+          category: item?.category
+        }
+        console.log(cart);
+        axiosSecure.post('/carts', cart)
+        .then(res =>{
+          if(res.data.acknowledged){
+            Swal.fire("Item added to cart");
+            setCartLoading(false)
+            refetch()
+          }
+          else{
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+            setCartLoading(false)
+          }
+        })
+        
+      }
+      else{
+        Swal.fire({
+          title: "Please login for add to cart",
+          // showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Login",
+        }).then((result) => {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            navigate('/login')
+          } else if (result.isDenied) {
+            ''
+          }
+        });
+      }
+    }
   return (
     <>
       <ImageSectionContent
@@ -27,7 +84,7 @@ const OurShop = () => {
         </div>
         <div className="grid md:grid-cols-3 gap-4 justify-center">
             {
-                menuData.map(menu => <Card key={menu?._id} img={menu?.image} title={menu?.name} description={menu?.recipe} btn={'add to cart'} />)
+                menuData.map(menu => <Card key={menu?._id} action={handleSaveCart} actionParam={menu} img={menu?.image} title={menu?.name} description={menu?.recipe} btn={cartLoading ? 'Loading' : 'add to cart'} />)
             }
         </div>
       </section>

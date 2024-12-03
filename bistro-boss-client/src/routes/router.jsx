@@ -5,7 +5,8 @@ import OurMenu from '../Pages/OurMenu/OurMenu'
 import OurShop from '../Pages/OurShop/OurShop'
 import Login from '../Pages/Login/Login'
 import Register from '../Pages/Register/Register'
-import PrivateRouter from '../Pages/Private/PrivateRouter'
+import Dashboard from '../Layout/Dashboard/Dashboard'
+import Cart from '../Pages/Cart/Cart'
 
 
 export const router = createBrowserRouter([
@@ -23,7 +24,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/shop/:category',
-                element: <PrivateRouter><OurShop/></PrivateRouter>,
+                element: <OurShop/>,
                 loader: ({params}) => fetch(`http://localhost:5000/menu/${params.category}`)
             },
             {
@@ -33,6 +34,16 @@ export const router = createBrowserRouter([
             {
                 path: '/register',
                 element: <Register/>
+            }
+        ]
+    },
+    {
+        path: '/dashboard',
+        element: <Dashboard/>,
+        children: [
+            {
+                path: '/dashboard/carts',
+                element: <Cart/>
             }
         ]
     }

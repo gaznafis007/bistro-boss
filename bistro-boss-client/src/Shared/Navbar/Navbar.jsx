@@ -1,9 +1,12 @@
 import { NavLink } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
+import { FaCartArrowDown } from "react-icons/fa";
+import useCart from "../../hooks/useCart";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const [data] = useCart();
   const handleLogout = () => {
     logout().then(() => {
       Swal.fire("Logout successfully");
@@ -59,6 +62,23 @@ const Navbar = () => {
           }
         >
           our shop
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/dashboard/carts"
+          className={({ isActive }) =>
+            isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
+          }
+        >
+          <div className="indicator">
+            <span className="indicator-item indicator-sm indicator-bottom badge badge-error">
+              {data.length}+
+            </span>
+            <div className="grid place-items-center">
+              <FaCartArrowDown size={28} />
+            </div>
+          </div>
         </NavLink>
       </li>
       <li>
