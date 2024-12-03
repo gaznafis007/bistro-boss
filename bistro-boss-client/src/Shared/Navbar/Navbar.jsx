@@ -71,14 +71,21 @@ const Navbar = () => {
             isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
           }
         >
-          <div className="indicator">
+          {
+            user?.uid ? 
+            (
+              <div className="indicator">
             <span className="indicator-item indicator-sm indicator-bottom badge badge-error">
-              {data.length}+
+              {data?.length}+
             </span>
             <div className="grid place-items-center">
               <FaCartArrowDown size={28} />
             </div>
           </div>
+            )
+            : 
+            <FaCartArrowDown size={28} />
+          }
         </NavLink>
       </li>
       <li>

@@ -40,7 +40,7 @@ const DashboardNav = () => {
         <NavLink to={'/menu'}>menu</NavLink>
     </li>
     <li>
-        <NavLink to={'/shop'}>shop</NavLink>
+        <NavLink to={'/shop/pizza'}>shop</NavLink>
     </li>
     <li>
         <NavLink to={'/contact'}>contact</NavLink>
