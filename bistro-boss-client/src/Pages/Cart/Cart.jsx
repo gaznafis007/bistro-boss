@@ -11,10 +11,10 @@ import { useState } from "react";
 
 const Cart = () => {
  
-  const [data, refetch, isLoading] = useCart()
+  const [data, refetch, isLoading, isPending] = useCart()
   const [loading, setLoading] = useState(false)
   const axiosSecure = useAxios()
-  if(isLoading){
+  if(isLoading || isPending){
     return <Loading/>
   }
   const handleDelete = item =>{
@@ -35,7 +35,7 @@ const Cart = () => {
       <div className="my-6 bg-white md:mx-20 p-6">
         <div className="flex flex-row justify-between">
           <h2 className="text-2xl font-bold uppercase font-serif">
-            total items: {data.length}
+            {/* total items: {data.length} */}
           </h2>
           <h2 className="text-2xl font-bold uppercase font-serif">
             total price: ${price}
@@ -87,5 +87,4 @@ const Cart = () => {
     </div>
   );
 };
-
 export default Cart;

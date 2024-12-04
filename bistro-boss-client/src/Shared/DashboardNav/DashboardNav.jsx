@@ -3,6 +3,21 @@ import useCart from '../../hooks/useCart';
 
 const DashboardNav = () => {
     const [data] = useCart()
+    const isAdmin = true;
+    const adminItems = <>
+    <li>
+        <NavLink to='/dashboard/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>admin home</NavLink>
+    </li>
+    <li>
+        <NavLink to='/dashboard/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>add item</NavLink>
+    </li>
+    <li>
+        <NavLink to='/dashboard/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>manage booking</NavLink>
+    </li>
+    <li>
+        <NavLink to='/dashboard/admin/users' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>all user</NavLink>
+    </li>
+    </>
     const navItems = <>
     <li>
         <NavLink to='/dashboard/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>user home</NavLink>
@@ -50,6 +65,7 @@ const DashboardNav = () => {
         <nav className='md:min-h-screen p-6 bg-[#D1A054]'>
             <h2 className="text-2xl text-center text-black uppercase font-bold">bistro boss</h2>
             <ul className='mt-4 text-center flex flex-col space-y-2 capitalize'>
+                {isAdmin && adminItems}
                 {navItems}
             </ul>
             <div className="divider divider-primary"></div>

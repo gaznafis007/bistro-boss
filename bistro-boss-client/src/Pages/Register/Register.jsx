@@ -15,14 +15,29 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const handleRegister = (data) => {
-    signUp(data.email, data?.password)
+  const handleRegister = (userInfo) => {
+    const user = {
+      email: userInfo?.email,
+      name: userInfo?.name
+    }
+    fetch(`http://localhost:5000/users`, {
+      method: 'Post',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      if(data.acknowledged){
+    signUp(userInfo.email, userInfo?.password)
     .then(res => {
       console.log(res.user);
       if(res.user){
         getProfile(data?.name)
         Swal.fire({
-          position: "top-end",
+          position: "center",
           icon: "success",
           title: "Registered successfully",
           showConfirmButton: false,
@@ -38,6 +53,9 @@ const Register = () => {
         });
       }
     })
+      }
+    })
+    
   };
   
 

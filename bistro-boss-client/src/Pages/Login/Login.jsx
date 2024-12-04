@@ -14,7 +14,13 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const from = location?.state?.from?.pathname || '/';
-    const {login} = useAuth()
+    const {login, googleLogin} = useAuth()
+    const handleGoogleLogin = () =>{
+      googleLogin()
+      .then(res =>{
+        console.log(res.user)
+      })
+    }
     const handleLogin = event =>{
         event.preventDefault();
         const form = event.target;
@@ -112,7 +118,7 @@ const Login = () => {
             <div className="p-2 border border-black rounded-full hover:border-0 hover:bg-black hover:text-white">
               <FaFacebookF />
             </div>
-            <div className="p-2 border border-black rounded-full hover:border-0 hover:bg-black hover:text-white">
+            <div onClick={handleGoogleLogin} className="p-2 border border-black rounded-full hover:border-0 hover:bg-black hover:text-white">
               <FaGoogle/>
             </div>
             <div className="p-2 border border-black rounded-full hover:border-0 hover:bg-black hover:text-white">
