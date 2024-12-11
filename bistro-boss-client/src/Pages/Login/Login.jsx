@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Swal from 'sweetalert2'
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
+import useAxiosPublic from "../../hooks/usePublicAxios";
 
 const Login = () => {
     const [isDisabled, setIsDisabled] = useState(true)
@@ -15,10 +16,17 @@ const Login = () => {
     const location = useLocation();
     const from = location?.state?.from?.pathname || '/';
     const {login, googleLogin} = useAuth()
+    const axiosPublic = useAxiosPublic()
     const handleGoogleLogin = () =>{
       googleLogin()
       .then(res =>{
-        console.log(res.user)
+        const googleUser = res.user;
+        axiosPublic.post(`/users?email=${googleUser?.email}`, {name: googleUser?.displayName, email: googleUser?.email})
+        .then(res =>{
+          if(res.data){
+            navigate(from, {replace:true})
+          }
+        })
       })
     }
     const handleLogin = event =>{

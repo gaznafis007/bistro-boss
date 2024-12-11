@@ -20,7 +20,7 @@ const Register = () => {
       email: userInfo?.email,
       name: userInfo?.name
     }
-    fetch(`http://localhost:5000/users`, {
+    fetch(`http://localhost:5000/users?email=${userInfo?.email}`, {
       method: 'Post',
       headers: {
         'content-type': 'application/json'
@@ -53,6 +53,13 @@ const Register = () => {
         });
       }
     })
+      }
+      else{
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "User already exist!",
+        });
       }
     })
     
