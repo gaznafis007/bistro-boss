@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SubmitButton from "../../Components/SubmitButton/SubmitButton";
 import { FaFacebookF, FaGithub, FaGoogle } from "react-icons/fa";
 import bg from "../../assets/others/authentication.png";
@@ -6,15 +6,31 @@ import img from "../../assets/others/authentication1.png";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/usePublicAxios";
 
 const Register = () => {
-  const {register:signUp, getProfile} = useAuth();
+  const {register:signUp, getProfile, googleLogin} = useAuth();
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location?.state?.from.pathname || '/'
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const axiosPublic = useAxiosPublic()
+  const handleGoogleLogin = () =>{
+    googleLogin()
+    .then(res =>{
+      const googleUser = res.user;
+      axiosPublic.post(`/users?email=${googleUser?.email}`, {name: googleUser?.displayName, email: googleUser?.email})
+      .then(res =>{
+        if(res.data){
+          navigate(from, {replace: true})
+        }
+      })
+    })
+  }
   const handleRegister = (userInfo) => {
     const user = {
       email: userInfo?.email,
@@ -167,7 +183,7 @@ const Register = () => {
             <div className="p-2 border border-black rounded-full hover:border-0 hover:bg-black hover:text-white">
               <FaFacebookF />
             </div>
-            <div className="p-2 border border-black rounded-full hover:border-0 hover:bg-black hover:text-white">
+            <div onClick={handleGoogleLogin} className="p-2 border border-black rounded-full hover:border-0 hover:bg-black hover:text-white">
               <FaGoogle />
             </div>
             <div className="p-2 border border-black rounded-full hover:border-0 hover:bg-black hover:text-white">
