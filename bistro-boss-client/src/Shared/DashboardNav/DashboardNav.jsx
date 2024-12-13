@@ -1,15 +1,20 @@
 import { NavLink } from 'react-router-dom';
 import useCart from '../../hooks/useCart';
+import useAdmin from '../../hooks/useAdmin';
+import Loading from '../../Components/Loading/Loading';
 
 const DashboardNav = () => {
     const [data] = useCart()
-    const isAdmin = true;
+    const [isAdmin, isAdminLoading] = useAdmin();
     const adminItems = <>
     <li>
         <NavLink to='/dashboard/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>admin home</NavLink>
     </li>
     <li>
-        <NavLink to='/dashboard/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>add item</NavLink>
+        <NavLink to='/dashboard/admin/addItem' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>add item</NavLink>
+    </li>
+    <li>
+        <NavLink to='/dashboard/admin/allItems' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>manage items</NavLink>
     </li>
     <li>
         <NavLink to='/dashboard/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>manage booking</NavLink>
@@ -61,12 +66,15 @@ const DashboardNav = () => {
         <NavLink to={'/contact'}>contact</NavLink>
     </li>
     </>
+    if(isAdminLoading){
+        return <Loading/>
+    }
     return (
         <nav className='md:min-h-screen p-6 bg-[#D1A054]'>
             <h2 className="text-2xl text-center text-black uppercase font-bold">bistro boss</h2>
             <ul className='mt-4 text-center flex flex-col space-y-2 capitalize'>
                 {isAdmin && adminItems}
-                {navItems}
+                {!isAdmin && navItems}
             </ul>
             <div className="divider divider-primary"></div>
             <ul className='mt-4 text-center flex flex-col space-y-2 capitalize'>

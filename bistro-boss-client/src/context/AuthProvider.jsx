@@ -54,12 +54,10 @@ const AuthProvider = ({ children }) => {
         axiosPublic.post('/jwt', {email: currentUser?.email})
         .then(res => {
           const token = res.data.token;
-          console.log('setting item')
           localStorage.setItem('accessToken', token)
         })
       }
       else{
-        console.log('clearing token');
         localStorage.removeItem('accessToken');
       }
     });

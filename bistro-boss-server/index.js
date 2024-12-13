@@ -68,11 +68,44 @@ async function run() {
       const result = await menuCollection.find().toArray();
       res.send(result);
     });
+    app.get('/menu/:id', async(req, res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await menuCollection.findOne(query);
+      res.send(result);
+    })
     app.get("/menu/:category", async (req, res) => {
       const query = { category: req.params.category };
       const result = await menuCollection.find(query).toArray();
       res.send(result);
     });
+    app.post("/menu", verifyToken, verifyAdmin, async(req,res) =>{
+      const item = req.body;
+      const result = await menuCollection.insertOne(item);
+      res.send(result)
+    });
+    app.patch('/menu/:id', async(req, res) =>{
+      const id = req.params.id;
+      const menuItem = req.body;
+      const query = {_id: new ObjectId(id)};
+      const updatedDoc = {
+        $set: {
+          name: menuItem?.name,
+          price: menuItem?.price,
+          category: menuItem?.category,
+          image: menuItem?.image,
+          recipe: menuItem?.recipe
+        }
+      }
+      const result = await menuCollection.updateOne(query, updatedDoc);
+      res.send(result)
+    })
+    app.delete('/menu/:id', verifyToken, verifyAdmin, async(req,res) =>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result = await menuCollection.deleteOne(query);
+      res.send(result)
+    })
     app.post("/carts", verifyToken, async (req, res) => {
       const cart = req.body;
       const result = await cartCollection.insertOne(cart);
@@ -123,7 +156,7 @@ async function run() {
       const result = await userCollection.updateOne(query, updatedDoc);
       res.send(result);
     });
-    app.delete("/users/:id", async (req, res) => {
+    app.delete("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await userCollection.deleteOne(query);
@@ -133,6 +166,16 @@ async function run() {
       const result = await reviewCollection.find().toArray();
       res.send(result);
     });
+    app.get('/admin', async(req, res) =>{
+      const email = req?.query?.email;
+      const query = {email: email};
+      let isAdmin
+      const user = await userCollection.findOne(query);
+      if(user?.role === 'admin'){
+        isAdmin = true
+      }
+      res.send({isAdmin})
+    })
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
