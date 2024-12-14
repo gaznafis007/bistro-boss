@@ -51,7 +51,7 @@ const Register = () => {
     .then(res => {
       console.log(res.user);
       if(res.user){
-        getProfile(data?.name)
+        getProfile(userInfo?.name)
         Swal.fire({
           position: "center",
           icon: "success",

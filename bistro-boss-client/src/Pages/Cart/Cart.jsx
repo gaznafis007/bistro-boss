@@ -28,7 +28,7 @@ const Cart = () => {
         }
     })
   }
-  const price = data.reduce((sum, item) => sum + item.price, 0);
+  const price = data.reduce((sum, item) => sum + parseFloat(item.price), 0);
   return (
     <div className="bg-slate-100 w-full p-8">
       <SectionTitle subHeading={"My Cart"} heading={"wanna add more?"} />
@@ -41,7 +41,7 @@ const Cart = () => {
             total price: ${price}
           </h2>
           <Link
-            to="/dashboard/payment"
+            to="/dashboard/itemPayment"
             className="capitalize text-white bg-[#D1A054] p-2 rounded-md"
           >
             pay

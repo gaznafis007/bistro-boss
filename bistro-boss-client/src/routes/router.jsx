@@ -13,6 +13,8 @@ import AdminRoute from '../Pages/Private/AdminRoute'
 import AllItems from '../Pages/AllItems/AllItems'
 import AddItem from '../Pages/AddItem/AddItem'
 import UpdateItem from '../Pages/UpdateItem/UpdateItem'
+import ItemPayment from '../Pages/Payment/ItemPayment'
+import PaymentHistory from '../Pages/PaymentHistory/PaymentHistory'
 
 
 export const router = createBrowserRouter([
@@ -31,7 +33,7 @@ export const router = createBrowserRouter([
             {
                 path: '/shop/:category',
                 element: <OurShop/>,
-                loader: ({params}) => fetch(`http://localhost:5000/menu/${params.category}`)
+                loader: ({params}) => fetch(`http://localhost:5000/menus/${params.category}`)
             },
             {
                 path: '/login',
@@ -50,6 +52,14 @@ export const router = createBrowserRouter([
             {
                 path: '/dashboard/carts',
                 element: <Cart/>
+            },
+            {
+                path: '/dashboard/itemPayment',
+                element: <ItemPayment/>
+            },
+            {
+                path: '/dashboard/paymentHistory',
+                element: <PaymentHistory/>
             },
             {
                 path: '/dashboard/admin/users',

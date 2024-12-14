@@ -4,6 +4,8 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const app = express();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const Stripe = require('stripe');
+const stripe = Stripe(`sk_test_51QVjNPK0RLZZEzzT28TNIrWtfDgs0EDlmMuDXnhfZvqKGuiLgtfJtRW790gcasWQ05PvHDc1EtiJYzr7dU5mk6no00ahnJu2Zs`);
 
 app.use(express.json());
 app.use(cors());
@@ -31,6 +33,7 @@ async function run() {
     const reviewCollection = client.db("bistroDB").collection("review");
     const cartCollection = client.db("bistroDB").collection("carts");
     const userCollection = client.db("bistroDB").collection("users");
+    const paymentCollection = client.db('bistroDB').collection('payments')
     await client.connect();
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -74,7 +77,7 @@ async function run() {
       const result = await menuCollection.findOne(query);
       res.send(result);
     })
-    app.get("/menu/:category", async (req, res) => {
+    app.get("/menus/:category", async (req, res) => {
       const query = { category: req.params.category };
       const result = await menuCollection.find(query).toArray();
       res.send(result);
@@ -175,6 +178,42 @@ async function run() {
         isAdmin = true
       }
       res.send({isAdmin})
+    })
+    app.post('/create-payment-intent', async(req,res) =>{
+      const {amount} = req.body;
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount,
+        currency: 'usd',
+        payment_method_types: ['card']
+      })
+      res.send({clientSecret: paymentIntent.client_secret})
+    })
+    app.post('/payments', async(req,res) =>{
+      const info = req.body;
+      // console.log(paymentInfo);
+      const email = req.query.email;
+      const itemsQuery = {email: email}
+      const items = await cartCollection.find(itemsQuery, {projection: {menuId: 1}}).toArray()
+      const menuIds = items.map(item => item?.menuId)
+      const cartIds = items.map(item => item?._id)
+      const paymentInfo = {
+        trxId: info?.trxId,
+        name: info?.name,
+        email: info?.email,
+        amount: info?.amount,
+        category: info?.category,
+        menuIds,
+        status: 'pending'
+      }
+      const cartQuery = { _id: {$in : cartIds.map(cartId => new ObjectId (cartId))}};
+      const clearingCarts = await cartCollection.deleteMany(cartQuery);
+      const result = await paymentCollection.insertOne(paymentInfo);
+      res.send({payment: result, deleteCarts: clearingCarts})
+    })
+    app.get('/payments', async(req,res) =>{
+      const query = {email: req?.query?.email};
+      const result = await paymentCollection.find(query).toArray()
+      res.send(result)
     })
   } finally {
     // Ensures that the client will close when you finish/error
