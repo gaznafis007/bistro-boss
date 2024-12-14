@@ -15,7 +15,7 @@ import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
 
 const Testimonials = () => {
-    const [testimonials, loading] = useFetch('http://localhost:5000/review')
+    const [testimonials, loading] = useFetch('https://bistro-boss-server-roan-delta.vercel.app/review')
     return (
         <section className='max-w-[1320px] mx-auto'>
             <SectionTitle subHeading={'What Our CLient Say'} heading={'testimonials'}/>

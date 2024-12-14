@@ -13,7 +13,7 @@ import useFetch from "../../hooks/useFetch";
 
 
 const OurMenu = () => {
-    const [menus, loading] = useFetch('http://localhost:5000/menu');
+    const [menus, loading] = useFetch('https://bistro-boss-server-roan-delta.vercel.app/menu');
     const offered = menus?.filter(menu => menu?.category === 'offered');
     const desserts = menus?.filter(menu => menu?.category === 'dessert');
     const pizzas = menus?.filter(menu => menu?.category === 'pizza');

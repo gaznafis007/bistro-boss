@@ -6,7 +6,7 @@ import Loading from "../../../Components/Loading/Loading";
 
 const Menu = () => {
     
-    const [menuData, loading] = useFetch('http://localhost:5000/menu')
+    const [menuData, loading] = useFetch('https://bistro-boss-server-roan-delta.vercel.app/menu')
     const popularItems = menuData?.filter(item => item.category === 'popular');
   return (
     <section className="max-w-[1320px] mx-auto my-4">

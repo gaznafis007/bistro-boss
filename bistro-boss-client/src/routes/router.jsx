@@ -35,7 +35,7 @@ export const router = createBrowserRouter([
             {
                 path: '/shop/:category',
                 element: <OurShop/>,
-                loader: ({params}) => fetch(`http://localhost:5000/menus/${params.category}`)
+                loader: ({params}) => fetch(`https://bistro-boss-server-roan-delta.vercel.app/menus/${params.category}`)
             },
             {
                 path: '/login',
@@ -86,7 +86,7 @@ export const router = createBrowserRouter([
             {
                 path: '/dashboard/admin/updateItem/:id',
                 element: <AdminRoute><UpdateItem/></AdminRoute>,
-                loader: ({params})=> fetch(`http://localhost:5000/menu/${params?.id}`)
+                loader: ({params})=> fetch(`https://bistro-boss-server-roan-delta.vercel.app/menu/${params?.id}`)
             }
         ]
     }

@@ -8,7 +8,10 @@ const Stripe = require('stripe');
 const stripe = Stripe(`sk_test_51QVjNPK0RLZZEzzT28TNIrWtfDgs0EDlmMuDXnhfZvqKGuiLgtfJtRW790gcasWQ05PvHDc1EtiJYzr7dU5mk6no00ahnJu2Zs`);
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://bistro-boss-client-56fcc.web.app']
+}));
+app.options('*', cors());
 require("dotenv").config();
 
 app.get("/", (req, res) => {
@@ -36,7 +39,7 @@ async function run() {
     const paymentCollection = client.db('bistroDB').collection('payments')
     await client.connect();
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
 
     // middlewares
     const verifyToken = (req, res, next) => {
@@ -218,7 +221,7 @@ async function run() {
       const result = await paymentCollection.find(query).toArray()
       res.send(result)
     });
-    app.get('/stats', async(req, res) =>{
+    app.get('/stats',verifyToken, verifyAdmin, async(req, res) =>{
       try{
         const pipeline = [
           // making the object ids

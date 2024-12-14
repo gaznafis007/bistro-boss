@@ -36,7 +36,7 @@ const Register = () => {
       email: userInfo?.email,
       name: userInfo?.name
     }
-    fetch(`http://localhost:5000/users?email=${userInfo?.email}`, {
+    fetch(`https://bistro-boss-server-roan-delta.vercel.app/users?email=${userInfo?.email}`, {
       method: 'Post',
       headers: {
         'content-type': 'application/json'
