@@ -8,7 +8,7 @@ const DashboardNav = () => {
     const [isAdmin, isAdminLoading] = useAdmin();
     const adminItems = <>
     <li>
-        <NavLink to='/dashboard/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>admin home</NavLink>
+        <NavLink to='/dashboard/admin/home' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>admin home</NavLink>
     </li>
     <li>
         <NavLink to='/dashboard/admin/addItem' className={({isActive})=> isActive ? 'text-white' : 'text-black'}>add item</NavLink>

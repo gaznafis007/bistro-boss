@@ -188,7 +188,7 @@ async function run() {
       })
       res.send({clientSecret: paymentIntent.client_secret})
     })
-    app.post('/payments', async(req,res) =>{
+    app.post('/payments',verifyToken, async(req,res) =>{
       const info = req.body;
       // console.log(paymentInfo);
       const email = req.query.email;
@@ -210,10 +210,61 @@ async function run() {
       const result = await paymentCollection.insertOne(paymentInfo);
       res.send({payment: result, deleteCarts: clearingCarts})
     })
-    app.get('/payments', async(req,res) =>{
-      const query = {email: req?.query?.email};
+    app.get('/payments',verifyToken, async(req,res) =>{
+      let query = {}
+      if(req?.query?.email){
+        query = {email: req?.query?.email};
+      }
       const result = await paymentCollection.find(query).toArray()
       res.send(result)
+    });
+    app.get('/stats', async(req, res) =>{
+      try{
+        const pipeline = [
+          // making the object ids
+          {
+            $addFields: {
+              menuIds:{
+                $map:{
+                  input: '$menuIds',
+                  as: 'menuId',
+                  in: { $toObjectId: '$$menuId' }
+                }
+              }
+            }
+          },
+          { $unwind: '$menuIds' }, // flattening the menuIds array
+          {
+            $lookup:{
+              from: 'menu',
+              localField: 'menuIds',
+              foreignField: '_id',
+              as: 'menuDetails',
+            }
+          },
+          { $unwind: '$menuDetails'},
+          {
+            $group: {
+              _id: '$menuDetails.category',
+              quantity: {$sum: 1},
+              revenue: {$sum: '$menuDetails.price'}
+            }
+          },
+          {
+            $project: {
+              category: '$_id',
+              quantity: 1,
+              revenue: 1,
+              _id: 0
+            }
+          }
+        ]
+        const result = await paymentCollection.aggregate(pipeline).toArray();
+        res.send(result)
+      }
+      catch(error){
+        res.status(500).send({success: false, message: 'Internal server error'})
+      }
     })
   } finally {
     // Ensures that the client will close when you finish/error

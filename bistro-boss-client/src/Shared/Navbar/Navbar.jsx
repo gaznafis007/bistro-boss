@@ -3,9 +3,11 @@ import useAuth from "../../hooks/useAuth";
 import Swal from "sweetalert2";
 import { FaCartArrowDown } from "react-icons/fa";
 import useCart from "../../hooks/useCart";
+import useAdmin from "../../hooks/useAdmin";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const [isAdmin] = useAdmin();
   const [data] = useCart();
   const handleLogout = () => {
     logout().then(() => {
@@ -36,7 +38,7 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink
-          to="/dashboard"
+          to={isAdmin ? '/dashboard/admin/home' : "/dashboard/home"}
           className={({ isActive }) =>
             isActive ? "text-yellow-400 capitalize" : "text-white capitalize"
           }
